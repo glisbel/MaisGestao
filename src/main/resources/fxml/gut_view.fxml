@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="15.0" style="-fx-padding: 20; -fx-background-color: #F4F6F5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gestao.agro.controller.GutController">
+   <children>
+      <!-- CABEÇALHO E SELEÇÃO DE ENTIDADE -->
+      <VBox spacing="10.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 5, 0, 0, 2);">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+               <children>
+                  <Label text="Matriz GUT - Priorização Estratégica" textFill="#1e3a2f">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Separator orientation="VERTICAL" />
+                  <Label style="-fx-font-weight: bold;" text="Alvo da Avaliação:*" />
+                  <RadioButton fx:id="rbTipoOrg" mnemonicParsing="false" selected="true" text="Cooperativa / Associação">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="grpTipoAlvo" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="rbTipoProd" mnemonicParsing="false" text="Produtor Rural" toggleGroup="$grpTipoAlvo" />
+
+                  <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Button onAction="#importarFraquezasAmeacas" style="-fx-background-color: #C62828; -fx-text-fill: white; -fx-font-weight: bold;" text="📥 Importar FOFA (Fraq./Ameaças)" />
+                        <Button onAction="#importarEstrategiasTows" style="-fx-background-color: #2E5A44; -fx-text-fill: white; -fx-font-weight: bold;" text="📥 Importar TOWS (Estratégias)" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+
+            <GridPane hgap="12.0" vgap="10.0">
+              <columnConstraints>
+                <ColumnConstraints minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="350.0" />
+                <ColumnConstraints minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="250.0" />
+              </columnConstraints>
+              <children>
+                 <Label fx:id="lblEntidadeAlvo" text="Organização:*" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                 <ComboBox fx:id="cbEntidadeAlvo" maxWidth="1.7976931348623157E308" promptText="Selecione a entidade..." GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                 <Label text="Consultor:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                 <TextField fx:id="txtConsultor" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+              </children>
+            </GridPane>
+         </children>
+      </VBox>
+
+      <!-- INDICADORES RESUMO DE CRITICIDADE -->
+      <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-background-color: white; -fx-padding: 10 15; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 3, 0, 0, 1);">
+         <children>
+            <Label style="-fx-font-weight: bold; -fx-text-fill: #1E3A2F;" text="Distribuição por Prioridade:" />
+            <Label fx:id="lblCountCritico" style="-fx-background-color: #FFEBEE; -fx-text-fill: #B71C1C; -fx-font-weight: bold; -fx-padding: 3 8; -fx-background-radius: 10;" text="0 Críticos (≥75)" />
+            <Label fx:id="lblCountAlto" style="-fx-background-color: #FFF3E0; -fx-text-fill: #E65100; -fx-font-weight: bold; -fx-padding: 3 8; -fx-background-radius: 10;" text="0 Altos (≥45)" />
+            <Label fx:id="lblCountMedio" style="-fx-background-color: #FFFDE7; -fx-text-fill: #F57F17; -fx-font-weight: bold; -fx-padding: 3 8; -fx-background-radius: 10;" text="0 Médios (≥20)" />
+            <Label fx:id="lblCountBaixo" style="-fx-background-color: #E8F5E9; -fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-padding: 3 8; -fx-background-radius: 10;" text="0 Baixos (&lt;20)" />
+         </children>
+      </HBox>
+
+      <!-- FORMULÁRIO DE AVALIAÇÃO GUT -->
+      <VBox spacing="10.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 4, 0, 0, 1);">
+         <children>
+            <Label text="Classificação do Problema / Iniciativa" textFill="#1e3a2f">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+
+            <GridPane hgap="12.0" vgap="10.0">
+               <columnConstraints>
+                  <ColumnConstraints minWidth="10.0" prefWidth="130.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="250.0" />
+                  <ColumnConstraints minWidth="10.0" prefWidth="130.0" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="250.0" />
+               </columnConstraints>
+               <children>
+                  <Label text="Problema / Ação:*" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <TextField fx:id="txtProblemaAcao" promptText="Descrição da questão a ser priorizada..." GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="0" />
+
+                  <Label text="Gravidade (1 a 5):" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <Slider fx:id="sldGravidade" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" min="1.0" minorTickCount="0" snapToTicks="true" value="3.0" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="lblValorGravidade" prefWidth="25.0" style="-fx-font-weight: bold;" text="3" />
+                     </children>
+                  </HBox>
+
+                  <Label text="Urgência (1 a 5):" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                     <children>
+                        <Slider fx:id="sldUrgencia" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" min="1.0" minorTickCount="0" snapToTicks="true" value="3.0" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="lblValorUrgencia" prefWidth="25.0" style="-fx-font-weight: bold;" text="3" />
+                     </children>
+                  </HBox>
+
+                  <Label text="Tendência (1 a 5):" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <Slider fx:id="sldTendencia" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" min="1.0" minorTickCount="0" snapToTicks="true" value="3.0" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="lblValorTendencia" prefWidth="25.0" style="-fx-font-weight: bold;" text="3" />
+                     </children>
+                  </HBox>
+
+                  <Label text="Resultado GUT:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <HBox alignment="CENTER_LEFT" spacing="12.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                     <children>
+                        <Label fx:id="lblScoreCalculado" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1E3A2F;" text="Score: 27" />
+                        <Label fx:id="lblPrioridadeCalculada" style="-fx-background-color: #FFFDE7; -fx-text-fill: #F57F17; -fx-padding: 3 8; -fx-background-radius: 10; -fx-font-weight: bold;" text="MÉDIO" />
+                     </children>
+                  </HBox>
+
+                  <Label text="Ação Recomendada:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtAcaoProposta" promptText="Diretriz de intervenção primária..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                  <Label text="Estado:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <ComboBox fx:id="cbStatus" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+               </children>
+            </GridPane>
+
+            <HBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 5 0 0 0;">
+               <children>
+                  <Button onAction="#limparFormulario" prefHeight="30.0" prefWidth="100.0" text="Limpar" />
+                  <Button onAction="#salvarItem" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #2E5A44; -fx-text-fill: white; -fx-font-weight: bold;" text="Salvar na Matriz" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+
+      <!-- TABELA DE PRIORIZAÇÃO GUT -->
+      <VBox spacing="8.0" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 8;" VBox.vgrow="ALWAYS">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Fila de Prioridades (Ordenada por Score GUT)" textFill="#1e3a2f">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+
+            <TableView fx:id="tblGut" VBox.vgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="colProblema" prefWidth="320.0" text="Problema / Iniciativa" />
+                  <TableColumn fx:id="colOrigem" prefWidth="80.0" style="-fx-alignment: CENTER;" text="Origem" />
+                  <TableColumn fx:id="colGravidade" prefWidth="50.0" style="-fx-alignment: CENTER;" text="G" />
+                  <TableColumn fx:id="colUrgencia" prefWidth="50.0" style="-fx-alignment: CENTER;" text="U" />
+                  <TableColumn fx:id="colTendencia" prefWidth="50.0" style="-fx-alignment: CENTER;" text="T" />
+                  <TableColumn fx:id="colScore" prefWidth="75.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" text="Score" />
+                  <TableColumn fx:id="colPrioridade" prefWidth="95.0" style="-fx-alignment: CENTER;" text="Prioridade" />
+                  <TableColumn fx:id="colAcao" prefWidth="250.0" text="Ação Recomendada" />
+                  <TableColumn fx:id="colStatus" prefWidth="100.0" style="-fx-alignment: CENTER;" text="Estado" />
+               </columns>
+            </TableView>
+
+            <HBox alignment="CENTER_RIGHT" spacing="8.0">
+               <children>
+                  <Button onAction="#editarItemSelecionado" text="Editar" />
+                  <Button onAction="#excluirItemSelecionado" style="-fx-text-fill: #c62828;" text="Excluir" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+
+      <!-- RODAPÉ DE MENSAGENS -->
+      <HBox alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 8 12; -fx-background-radius: 6;">
+         <children>
+            <Label fx:id="lblStatusMensagem" textFill="#2e7d32">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</VBox>
