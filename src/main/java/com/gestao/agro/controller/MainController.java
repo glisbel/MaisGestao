@@ -59,7 +59,7 @@ public class MainController {
 
     @FXML
     private void abrirGut(ActionEvent event) {
-        lblTituloModulo.setText("Módulo 5: Matriz GUT e Priorização de Ações");
+        carregarView("/fxml/gut_view.fxml", "Módulo 5: Matriz GUT - Priorização Estratégica");
     }
 
     @FXML
